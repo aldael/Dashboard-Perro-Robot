@@ -1,0 +1,44 @@
+<section class="card card-effort">
+  <header class="card-head">
+    <div>
+      <h2>Esfuerzo</h2>
+      <p class="sub">Torque y velocidad de articulaciones</p>
+    </div>
+    <span class="pill pill-derived">DERIVADO</span>
+  </header>
+
+  <div class="estado" [class.marcha]="moviendose()">
+    <i></i>
+    {{ moviendose() ? 'ROBOT EN MARCHA' : 'ROBOT DETENIDO' }}
+  </div>
+
+  <div class="numeros">
+    <div [class.alerta]="torqueMax() >= umbral">
+      <span>Torque máx.</span>
+      <b>{{ torqueMax().toFixed(2) }}<small>Nm</small></b>
+    </div>
+    <div>
+      <span>Torque medio</span>
+      <b>{{ torqueMedio().toFixed(2) }}<small>Nm</small></b>
+    </div>
+    <div>
+      <span>Vel. media</span>
+      <b>{{ velocidadMedia().toFixed(2) }}<small>rad/s</small></b>
+    </div>
+  </div>
+
+  <div class="chart-head"><span>Torque · 60 s</span><i class="n"></i>máx. <i class="m"></i>medio</div>
+  <app-line-chart [series]="series()" [times]="times()" [height]="118" unit="Nm"
+    [min]="0" [digits]="1" />
+
+  <div class="actividad">
+    <span>Actividad · 8 s</span>
+    <div class="barras">
+      @for (v of actividad(); track $index) {
+        <i [style.height.%]="v"></i>
+      }
+    </div>
+  </div>
+
+  <p class="nota">Umbral de 6 Nm sólo orientativo; en el robot real el torque es medido y cambia.</p>
+</section>

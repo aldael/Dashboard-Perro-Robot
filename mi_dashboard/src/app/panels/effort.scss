@@ -1,0 +1,142 @@
+.card-effort {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: max-content;
+  margin-top: 12px;
+  padding: 5px 9px;
+  border: 1px solid rgb(148 163 184 / 22%);
+  border-radius: 6px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+
+  i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #64748b;
+  }
+
+  &.marcha {
+    border-color: rgb(74 222 128 / 45%);
+    background: rgb(74 222 128 / 10%);
+    color: #86efac;
+
+    i {
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+      animation: latido 1s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes latido {
+  50% { opacity: 0.45; }
+}
+
+.numeros {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0 12px;
+
+  div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: rgb(15 23 42 / 55%);
+
+    &.alerta {
+      background: rgb(251 146 60 / 12%);
+      box-shadow: inset 2px 0 0 #fb923c;
+    }
+  }
+
+  span {
+    color: #94a3b8;
+    font-size: 10px;
+  }
+
+  b {
+    color: #f8fafc;
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+
+    small {
+      margin-left: 3px;
+      color: #64748b;
+      font-size: 9px;
+      font-weight: 500;
+    }
+  }
+}
+
+.chart-head {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 2px;
+  color: #94a3b8;
+  font-size: 10px;
+
+  span {
+    margin-right: auto;
+  }
+
+  i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .n { background: #fb923c; }
+  .m { background: #a78bfa; }
+}
+
+.actividad {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgb(148 163 184 / 10%);
+
+  > span {
+    flex: none;
+    padding-bottom: 2px;
+    color: #64748b;
+    font-size: 9px;
+  }
+}
+
+.barras {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 30px;
+  flex: 1;
+
+  i {
+    flex: 1;
+    min-height: 2px;
+    border-radius: 1px 1px 0 0;
+    background: linear-gradient(180deg, #22d3ee, rgb(34 211 238 / 20%));
+  }
+}
+
+.nota {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 9px;
+  line-height: 1.4;
+}

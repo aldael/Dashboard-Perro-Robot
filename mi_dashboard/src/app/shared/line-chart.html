@@ -1,0 +1,51 @@
+<div class="line-chart" [style.height.px]="height()">
+  <div class="y-axis" aria-hidden="true">
+    @for (tick of plot().ticks; track $index) {
+      <span class="tick" [style.top.%]="tick.top">{{ tick.label }}</span>
+    }
+  </div>
+
+  <div class="plot" (mousemove)="onMove($event)" (mouseleave)="hoverIndex.set(null)">
+    <svg viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
+      @for (tick of plot().ticks; track $index) {
+        <line x1="0" x2="1000" [attr.y1]="(1 - $index / 4) * 300" [attr.y2]="(1 - $index / 4) * 300"
+          class="grid" vector-effect="non-scaling-stroke" />
+      }
+      @if (zeroY(); as zy) {
+        <line x1="0" x2="1000" [attr.y1]="zy / 100 * 300" [attr.y2]="zy / 100 * 300"
+          class="zero" vector-effect="non-scaling-stroke" />
+      }
+      @for (path of plot().paths; track path.name) {
+        <path [attr.d]="path.d" [attr.stroke]="path.color" class="series"
+          vector-effect="non-scaling-stroke" />
+      }
+      @if (hoverX(); as hx) {
+        <line [attr.x1]="hx / 100 * 1000" [attr.x2]="hx / 100 * 1000"
+          y1="0" y2="300" class="crosshair" vector-effect="non-scaling-stroke" />
+      }
+    </svg>
+
+    @if (plot().n === 0) {
+      <div class="empty">Esperando muestras…</div>
+    }
+
+    @if (hoverIndex() !== null && hoverShown().length) {
+      <div class="tooltip" [style.left.%]="tooltipLeft()">
+        <div class="tooltip-time">t − {{ hoverAgo() }} s</div>
+        @for (v of hoverShown(); track v.name) {
+          <div class="tooltip-row">
+            <i [style.background]="v.color"></i>
+            <span class="tt-name">{{ v.name }}</span>
+            <b>{{ formatValue(v.value) }}<small>{{ unit() }}</small></b>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="x-axis" aria-hidden="true">
+    @for (label of plot().xLabels; track $index) {
+      <span>{{ label }}</span>
+    }
+  </div>
+</div>

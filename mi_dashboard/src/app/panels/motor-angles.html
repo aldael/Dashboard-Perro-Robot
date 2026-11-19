@@ -1,0 +1,52 @@
+<section class="card card-angles">
+  <header class="card-head">
+    <div>
+      <h2>Ángulos de motores</h2>
+      <p class="sub">Posición de cada articulación en el tiempo</p>
+    </div>
+    <div class="head-right">
+      <span class="pill pill-real">REAL · grados</span>
+      <span class="count">{{ motores().length }} motores</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <span class="toolbar-label">Ver</span>
+    <button type="button" (click)="seleccionar('todos')">Todos</button>
+    <button type="button" (click)="seleccionar('piernas')">Piernas</button>
+    <button type="button" (click)="seleccionar('ninguno')">Ninguno</button>
+    <span class="spacer"></span>
+    <span class="toolbar-label">Ventana</span>
+    @for (op of [{ s: 150, l: '15 s' }, { s: 300, l: '30 s' }, { s: 600, l: '60 s' }, { s: 900, l: '90 s' }]; track op.s) {
+      <button type="button" [class.active]="ventana() === op.s" (click)="ventana.set(op.s)">{{ op.l }}</button>
+    }
+  </div>
+
+  <div class="chart-holder">
+    <app-line-chart [series]="series()" [times]="times()" [height]="248" unit="°" [digits]="1" />
+  </div>
+
+  <div class="legend">
+    @for (g of gruposLista(); track g.nombre) {
+      <div class="legend-group">
+        <span class="group-name">{{ g.nombre }}</span>
+        <div class="chips">
+          @for (m of g.motores; track m.id) {
+            <button type="button" class="chip" [class.on]="seleccion().has(m.id)"
+              [style.--chip]="color(m.id)" (click)="toggle(m.id)"
+              [attr.aria-pressed]="seleccion().has(m.id)" [title]="'Mostrar/ocultar ' + m.nombre">
+              <i></i>
+              <span class="chip-name">{{ m.nombre }}</span>
+              <b>{{ m.angulo.toFixed(0) }}°</b>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="card-foot">
+    <span>{{ activos() }} de {{ motores().length }} series visibles</span>
+    <span>Pasá el mouse por el gráfico para ver los valores exactos</span>
+  </div>
+</section>

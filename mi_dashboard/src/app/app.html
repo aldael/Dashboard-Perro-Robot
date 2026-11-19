@@ -1,0 +1,139 @@
+<div class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" class="logo" aria-hidden="true">
+        <rect x="5" y="12" width="30" height="16" rx="5" />
+        <path d="M10 12 V7 M30 12 V7 M10 28 V33 M30 28 V33" />
+        <circle cx="14" cy="20" r="2.5" />
+        <circle cx="26" cy="20" r="2.5" />
+      </svg>
+      <div>
+        <div class="brand-title">UNITREE <span>LIVE</span></div>
+        <div class="brand-sub">TP05 · Dashboard de telemetría</div>
+      </div>
+    </div>
+
+    <div class="robot-chip">
+      <div class="robot-glyph">{{ modelo() === 'go2' ? '⌁' : '♟' }}</div>
+      <div>
+        <b>{{ nombreRobot() }}</b>
+        <span>{{ modelo() }} · {{ info()?.n_motores ?? latest()?.motores?.length ?? 0 }} motores</span>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="modo" [class.real]="!esSimulador()">
+      {{ esSimulador() ? 'SIMULADOR' : 'ROBOT REAL' }}
+    </div>
+
+    <button type="button" class="endpoint" (click)="abrirConfig()" title="Cambiar dirección de la API">
+      <span class="enlace">⤳</span>
+      <span>{{ telemetry.endpoint() }}</span>
+      <span class="gear">⚙</span>
+    </button>
+
+    <div class="estado" [class.live]="status() === 'live'" [class.polling]="status() === 'polling'">
+      <i></i>
+      <div>
+        <b>{{ estadoTexto() }}</b>
+        <span>{{ rate().toFixed(1) }} msg/s · {{ lastAge() === null ? '—' : lastAge() + ' s' }}</span>
+      </div>
+    </div>
+
+    <div class="reloj">{{ hora() }}</div>
+  </header>
+
+  @if (settingsOpen()) {
+    <div class="overlay" (click)="settingsOpen.set(false)">
+      <div class="config" (click)="$event.stopPropagation()">
+        <h3>Dirección de la API</h3>
+        <p>La misma que muestra <code>INICIAR_TP05</code>. El día del robot real cambiás sólo esto.</p>
+        <label for="endpoint">WebSocket: <code>{{ telemetry.wsUrl() }}</code></label>
+        <input id="endpoint" type="text" [value]="endpointEdit()"
+          (input)="endpointEdit.set($any($event.target).value)"
+          (keydown.enter)="aplicarEndpoint()" autocomplete="off" spellcheck="false" />
+        <div class="config-actions">
+          <button type="button" class="primary" (click)="aplicarEndpoint()">Conectar</button>
+          <button type="button" (click)="usarDefault()">Usar {{ '10.0.0.5:8001' }}</button>
+          <button type="button" (click)="settingsOpen.set(false)">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <main>
+    @if (status() === 'offline' && !latest()) {
+      <div class="banner error">
+        <b>Sin telemetría.</b> Revisá que el script <code>INICIAR_TP05</code> esté abierto y que la IP
+        <code>{{ telemetry.endpoint() }}</code> sea la correcta. El dashboard reintenta solo.
+        <button type="button" (click)="telemetry.reintentar()">Reintentar ahora</button>
+      </div>
+    } @else if (status() === 'polling') {
+      <div class="banner warn">
+        WebSocket caído: los datos llegan por <code>/telemetria</code> (fallback). Reconectando en segundo plano…
+      </div>
+    }
+
+    <section class="kpis" aria-label="Indicadores principales">
+      <div class="kpi">
+        <div class="kpi-icon cyan">▤</div>
+        <div>
+          <span>BATERÍA</span>
+          <b>{{ soc() }}<small>%</small></b>
+        </div>
+        <em class="fake">inventado</em>
+      </div>
+      <div class="kpi">
+        <div class="kpi-icon naranja">♨</div>
+        <div>
+          <span>TEMP. MÁXIMA</span>
+          <b>{{ maxTemp().toFixed(1) }}<small>°C</small></b>
+        </div>
+        <em>derivado</em>
+      </div>
+      <div class="kpi">
+        <div class="kpi-icon violeta">↻</div>
+        <div>
+          <span>TORQUE MÁXIMO</span>
+          <b>{{ maxTorque().toFixed(2) }}<small>Nm</small></b>
+        </div>
+        <em>derivado</em>
+      </div>
+      <div class="kpi" [class.activo]="moviendose()">
+        <div class="kpi-icon verde">{{ moviendose() ? '➤' : '■' }}</div>
+        <div>
+          <span>ESTADO</span>
+          <b class="estado-kpi">{{ moviendose() ? 'Caminando' : 'Detenido' }}</b>
+        </div>
+        <em>{{ modelo() === 'go2' ? apoyadas() + '/' + nPatas() + ' patas' : 'G1' }}</em>
+      </div>
+    </section>
+
+    <section class="grid">
+      <app-motor-angles [history]="history()" [latest]="latest()" [info]="info()" />
+      <app-attitude [history]="history()" [latest]="latest()" />
+
+      @if (modelo() === 'go2') {
+        <app-legs [history]="history()" [latest]="latest()" [info]="info()"
+          [moviendose]="moviendose()" />
+      }
+
+      <app-temperature [history]="history()" [latest]="latest()" />
+      <app-effort [history]="history()" [latest]="latest()" [moviendose]="moviendose()" />
+      <app-battery [history]="history()" [latest]="latest()" />
+    </section>
+
+    <footer>
+      <div class="provenance">
+        <span class="pill pill-real">REAL</span> ángulo y velocidad de motor, yaw
+        <span class="pill pill-derived">DERIVADO</span> torque, temperatura, roll/pitch, fuerzas de pata
+        <span class="pill pill-fake">INVENTADO</span> batería del simulador
+      </div>
+      <div class="footer-right">
+        WebSocket <code>/ws</code> · 10 Hz · umbrales orientativos ·
+        <button type="button" (click)="abrirConfig()">cambiar IP</button>
+      </div>
+    </footer>
+  </main>
+</div>

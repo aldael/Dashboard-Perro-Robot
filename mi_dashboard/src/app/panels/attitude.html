@@ -1,0 +1,71 @@
+<section class="card card-attitude">
+  <header class="card-head">
+    <div>
+      <h2>Inclinación y rumbo</h2>
+      <p class="sub">Horizonte artificial · IMU</p>
+    </div>
+    <span class="pill pill-derived">DERIVADO · roll/pitch</span>
+  </header>
+
+  <div class="instrumentos">
+    <div class="horizonte-wrap">
+      <div class="horizonte">
+        <div class="mundo" [style.transform]="horizonStyle()">
+          <div class="cielo"></div>
+          <div class="tierra"></div>
+          <div class="linea-horizonte"></div>
+          <div class="marca-pitch" style="top: calc(50% - 44px)"><span>+20</span></div>
+          <div class="marca-pitch" style="top: calc(50% - 22px)"><span>+10</span></div>
+          <div class="marca-pitch" style="top: calc(50% + 22px)"><span>−10</span></div>
+          <div class="marca-pitch" style="top: calc(50% + 44px)"><span>−20</span></div>
+        </div>
+        <svg class="avion" viewBox="0 0 100 60" aria-hidden="true">
+          <path d="M12 30 H40 L47 25 H53 L60 30 H88" />
+          <path d="M47 25 L50 16 L53 25" />
+          <circle cx="50" cy="30" r="2.5" />
+        </svg>
+        <div class="punta">▼</div>
+      </div>
+      <div class="lecturas">
+        <div><span>ROLL</span><b [class.cierto]="roll() > 1 || roll() < -1">{{ roll().toFixed(2) }}°</b></div>
+        <div><span>PITCH</span><b [class.cierto]="pitch() > 1 || pitch() < -1">{{ pitch().toFixed(2) }}°</b></div>
+      </div>
+    </div>
+
+    <div class="brujula-wrap">
+      <svg class="brujula" viewBox="0 0 120 120" aria-label="Rumbo de la IMU">
+        <circle cx="60" cy="60" r="52" class="dial" />
+        @for (t of ticks; track $index) {
+          <line [attr.x1]="t.x1" [attr.y1]="t.y1" [attr.x2]="t.x2" [attr.y2]="t.y2" class="tick" />
+        }
+        <text x="60" y="17" class="cardinal">N</text>
+        <text x="106" y="64" class="cardinal">E</text>
+        <text x="60" y="112" class="cardinal">S</text>
+        <text x="14" y="64" class="cardinal">O</text>
+        <g [attr.transform]="'rotate(' + yaw() + ' 60 60)'">
+          <polygon points="60,22 54,66 60,58 66,66" class="aguja" />
+          <circle cx="60" cy="60" r="5" class="centro" />
+        </g>
+      </svg>
+      <div class="lectura-yaw">
+        <span>YAW · {{ rumbo() }}</span>
+        <b>{{ yaw().toFixed(1) }}°</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="graficos">
+    <div class="grafico">
+      <div class="grafico-head"><span>Roll / pitch · 30 s</span><i class="roll"></i><i class="pitch"></i></div>
+      <app-line-chart [series]="serieInclinacion()" [times]="times()" [height]="84"
+        unit="°" [zeroLine]="true" [digits]="2" />
+    </div>
+    <div class="grafico">
+      <div class="grafico-head"><span>Rumbo (yaw) · 30 s</span><i class="yaw"></i></div>
+      <app-line-chart [series]="serieRumbo()" [times]="times()" [height]="72"
+        unit="°" [min]="0" [max]="360" [digits]="0" />
+    </div>
+  </div>
+
+  <p class="nota">Yaw es real; roll y pitch oscilan de forma derivada cuando el robot camina.</p>
+</section>

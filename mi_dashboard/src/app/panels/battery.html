@@ -1,0 +1,43 @@
+<section class="card card-battery">
+  <header class="card-head">
+    <div>
+      <h2>Batería</h2>
+      <p class="sub">Estado de carga del pack</p>
+    </div>
+    <span class="pill pill-fake">INVENTADO · simulador</span>
+  </header>
+
+  <div class="gauge-row">
+    <svg class="gauge" viewBox="0 0 140 140" aria-label="Estado de carga: {{ soc() }} por ciento">
+      <circle cx="70" cy="70" r="52" class="pista" transform="rotate(135 70 70)"
+        [attr.stroke-dasharray]="circunferencia + ' ' + (total - circunferencia)" />
+      <circle cx="70" cy="70" r="52" class="valor" transform="rotate(135 70 70)"
+        [attr.stroke-dasharray]="dash() + ' ' + (total - dash())" [attr.stroke]="color()" />
+      <text x="70" y="70" class="soc" [attr.fill]="color()">{{ soc() }}<tspan class="pct">%</tspan></text>
+      <text x="70" y="88" class="label">SOC</text>
+    </svg>
+
+    <div class="detalles">
+      <div><span>Corriente</span><b>{{ corriente() }}<small>mA</small></b></div>
+      <div><span>Temp. pack</span><b>{{ temp().toFixed(1) }}<small>°C</small></b></div>
+      <div><span>Celdas</span><b>{{ celdas().length }}</b></div>
+    </div>
+  </div>
+
+  @if (celdas().length) {
+    <div class="celdas">
+      @for (celda of celdas(); track $index) {
+        <div class="celda">
+          <span>C{{ $index + 1 }}</span>
+          <b>{{ celda.toFixed(2) }}<small>V</small></b>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="corriente-chart">
+    <div class="chart-head"><span>Corriente · 30 s</span><i></i>mA</div>
+    <app-line-chart [series]="series()" [times]="times()" [height]="66" unit="mA"
+      [min]="0" [digits]="0" />
+  </div>
+</section>

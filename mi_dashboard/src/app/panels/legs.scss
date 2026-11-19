@@ -1,0 +1,197 @@
+.card-legs {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cuerpo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.planta {
+  width: 172px;
+  height: 129px;
+  flex: none;
+}
+
+.chasis {
+  fill: rgb(30 41 59 / 95%);
+  stroke: rgb(148 163 184 / 45%);
+  stroke-width: 1.5;
+}
+
+.sensor {
+  fill: rgb(34 211 238 / 30%);
+  stroke: rgb(34 211 238 / 60%);
+}
+
+.antenita {
+  fill: none;
+  stroke: rgb(148 163 184 / 55%);
+  stroke-width: 2;
+}
+
+.pata-linea {
+  stroke: rgb(148 163 184 / 45%);
+  stroke-width: 3;
+  stroke-linecap: round;
+
+  &.arriba {
+    stroke: rgb(251 146 60 / 65%);
+  }
+}
+
+.pata {
+  fill: rgb(74 222 128 / 18%);
+  stroke: rgb(74 222 128 / 75%);
+  stroke-width: 2;
+  transition: 0.15s;
+
+  &.apoyada {
+    fill: rgb(74 222 128 / 40%);
+    filter: drop-shadow(0 0 6px rgb(74 222 128 / 60%));
+  }
+}
+
+.pata-texto {
+  fill: #e2e8f0;
+  font-size: 9px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.resumen {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  > span:not(.estado):not(.puntos) {
+    color: #64748b;
+    font-size: 10px;
+  }
+
+  b {
+    color: #4ade80;
+    font-size: 34px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+
+    small {
+      color: #64748b;
+      font-size: 15px;
+    }
+  }
+}
+
+.estado {
+  width: max-content;
+  padding: 3px 7px;
+  border: 1px solid rgb(148 163 184 / 25%);
+  border-radius: 4px;
+  color: #94a3b8;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+
+  &.marcha {
+    border-color: rgb(74 222 128 / 45%);
+    background: rgb(74 222 128 / 10%);
+    color: #4ade80;
+  }
+}
+
+.puntos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+
+  span {
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: rgb(148 163 184 / 10%);
+    color: #64748b;
+    font-size: 9px;
+
+    &.on {
+      background: rgb(74 222 128 / 16%);
+      color: #86efac;
+    }
+  }
+}
+
+.marcha {
+  padding-top: 10px;
+  border-top: 1px solid rgb(148 163 184 / 10%);
+}
+
+.marcha-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: #94a3b8;
+  font-size: 10px;
+
+  span:last-child {
+    color: #64748b;
+    font-size: 9px;
+  }
+
+  i {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin: 0 3px 0 6px;
+    border-radius: 2px;
+  }
+
+  .verde {
+    background: #4ade80;
+  }
+
+  .gris {
+    background: #334155;
+  }
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 3px;
+
+  .nombre {
+    width: 20px;
+    flex: none;
+    color: #94a3b8;
+    font-size: 9px;
+  }
+}
+
+.celdas {
+  display: flex;
+  gap: 2px;
+  width: 100%;
+
+  i {
+    height: 8px;
+    flex: 1;
+    border-radius: 1px;
+    background: rgb(51 65 85 / 80%);
+    transition: background 0.1s;
+
+    &.on {
+      background: #4ade80;
+    }
+  }
+}
+
+.nota {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 9px;
+  line-height: 1.4;
+}

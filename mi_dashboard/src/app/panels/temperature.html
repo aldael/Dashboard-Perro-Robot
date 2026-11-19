@@ -1,0 +1,53 @@
+<section class="card card-temp">
+  <header class="card-head">
+    <div>
+      <h2>Temperatura de motores</h2>
+      <p class="sub">Sube con el esfuerzo, baja al frenar</p>
+    </div>
+    <span class="pill pill-derived">DERIVADO · °C</span>
+  </header>
+
+  <div class="resumen">
+    <div class="dato">
+      <span>Máxima</span>
+      <b [style.color]="calientes() ? '#fb923c' : '#f8fafc'">{{ max().toFixed(1) }}<small>°C</small></b>
+    </div>
+    <div class="dato">
+      <span>Promedio</span>
+      <b>{{ promedio().toFixed(1) }}<small>°C</small></b>
+    </div>
+    <div class="dato">
+      <span>Mínima</span>
+      <b>{{ min().toFixed(1) }}<small>°C</small></b>
+    </div>
+    <div class="dato" [class.alerta]="calientes()">
+      <span>≥ {{ umbral }} °C</span>
+      <b>{{ calientes() }}<small>motores</small></b>
+    </div>
+  </div>
+
+  <div class="mapa">
+    @for (c of celdas(); track c.id) {
+      <div class="celda" [style.--temp]="c.color">
+        <div class="celda-top">
+          <span class="nombre">{{ c.nombre }}</span>
+          <b>{{ c.valor.toFixed(1) }}°</b>
+        </div>
+        <div class="barra"><i [style.width.%]="c.pct"></i></div>
+      </div>
+    } @empty {
+      <div class="vacio">Esperando motores…</div>
+    }
+  </div>
+
+  <div class="tendencia">
+    <div class="tendencia-head">
+      <span>Tendencia · últimos 60 s</span>
+      <span class="leyenda"><i class="naranja"></i> máxima <i class="cian"></i> promedio</span>
+    </div>
+    <app-line-chart [series]="series()" [times]="times()" [height]="104" unit="°C"
+      [min]="25" [max]="60" [digits]="1" />
+  </div>
+
+  <p class="nota">Umbral orientativo del simulador; en el robot real estos valores pueden ser distintos.</p>
+</section>

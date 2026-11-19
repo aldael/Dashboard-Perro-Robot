@@ -1,0 +1,151 @@
+:root {
+  color-scheme: dark;
+  --bg: #070b16;
+  --card: #0d1526;
+  --borde: rgb(148 163 184 / 14%);
+  --texto: #e2e8f0;
+  --tenue: #64748b;
+  --cian: #22d3ee;
+  --verde: #4ade80;
+  --naranja: #fb923c;
+  --violeta: #a78bfa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background:
+    radial-gradient(1100px 600px at 12% -10%, rgb(14 116 144 / 18%), transparent 65%),
+    radial-gradient(900px 500px at 92% 0%, rgb(124 58 237 / 12%), transparent 60%),
+    var(--bg);
+  color: var(--texto);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+/* ---------- Bloques compartidos por todos los paneles ---------- */
+
+/* Los hosts de los paneles son ítems de la grilla: sus tarjetas deben ocupar toda la celda. */
+app-motor-angles,
+app-attitude,
+app-legs,
+app-temperature,
+app-effort,
+app-battery {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  > .card {
+    flex: 1;
+  }
+}
+
+.card {
+  position: relative;
+  padding: 15px 16px 13px;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgb(19 30 51 / 96%), rgb(11 18 33 / 96%));
+  box-shadow: 0 14px 34px rgb(0 0 0 / 22%);
+}
+
+.card::before {
+  position: absolute;
+  top: 0;
+  left: 16px;
+  width: 46px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cian), transparent);
+  content: '';
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+
+  h2 {
+    margin: 0;
+    color: #f1f5f9;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: 0.01em;
+  }
+
+  .sub {
+    margin: 3px 0 0;
+    color: var(--tenue);
+    font-size: 10px;
+  }
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  padding: 3px 7px;
+  border: 1px solid;
+  border-radius: 4px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.pill-real {
+  border-color: rgb(74 222 128 / 40%);
+  background: rgb(74 222 128 / 10%);
+  color: #86efac;
+}
+
+.pill-derived {
+  border-color: rgb(167 139 250 / 40%);
+  background: rgb(167 139 250 / 10%);
+  color: #c4b5fd;
+}
+
+.pill-fake {
+  border-color: rgb(251 191 36 / 40%);
+  background: rgb(251 191 36 / 10%);
+  color: #fde68a;
+}
+
+code {
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgb(148 163 184 / 12%);
+  color: #cbd5e1;
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: 0.92em;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: rgb(148 163 184 / 22%);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

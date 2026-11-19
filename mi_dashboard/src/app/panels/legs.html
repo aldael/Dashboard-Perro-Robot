@@ -1,0 +1,58 @@
+@if (esCuadrupedo()) {
+  <section class="card card-legs">
+    <header class="card-head">
+      <div>
+        <h2>Patas apoyadas</h2>
+        <p class="sub">Vista superior · contacto con el suelo</p>
+      </div>
+      <span class="pill pill-derived">DERIVADO</span>
+    </header>
+
+    <div class="cuerpo">
+      <svg class="planta" viewBox="0 0 200 150" aria-label="Diagrama de patas del Go2">
+        <rect x="76" y="40" width="48" height="70" rx="14" class="chasis" />
+        <rect x="86" y="50" width="28" height="16" rx="5" class="sensor" />
+        <path d="M100 40 L100 20" class="antenita" />
+        @for (p of patas(); track p.nombre) {
+          <line [attr.x1]="p.x1" [attr.y1]="p.y1" [attr.x2]="p.x2" [attr.y2]="p.y2"
+            class="pata-linea" [class.arriba]="!p.apoyada" />
+          <circle [attr.cx]="p.x" [attr.cy]="p.y" r="14" class="pata"
+            [class.apoyada]="p.apoyada" />
+          <text [attr.x]="p.x" [attr.y]="p.y + 3" class="pata-texto">{{ p.nombre }}</text>
+        }
+      </svg>
+
+      <div class="resumen">
+        <span class="estado" [class.marcha]="moviendose()">
+          {{ moviendose() ? 'EN MARCHA' : 'DETENIDO' }}
+        </span>
+        <b>{{ apoyadas() }}<small>/{{ total() }}</small></b>
+        <span>patas apoyadas</span>
+        <div class="puntos">
+          @for (p of patas(); track p.nombre) {
+            <span [class.on]="p.apoyada">{{ p.nombre }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="marcha">
+      <div class="marcha-head">
+        <span>Historial de contacto · últimos 6,4 s</span>
+        <span><i class="verde"></i> apoyada <i class="gris"></i> en el aire</span>
+      </div>
+      @for (f of filas(); track f.nombre) {
+        <div class="fila">
+          <span class="nombre">{{ f.nombre }}</span>
+          <div class="celdas">
+            @for (celda of f.celdas; track $index) {
+              <i [class.on]="celda"></i>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <p class="nota">Quieto, las cuatro patas apoyan. Al caminar, las diagonales alternan.</p>
+  </section>
+}
